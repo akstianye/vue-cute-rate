@@ -110,6 +110,12 @@
       }
     },
 
+    watch:{
+      value(val){
+        this.currentValue = val;
+      }
+    },
+
     computed: {
       starDisable () {
         return this.disabled && this.disabledCursor
