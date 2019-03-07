@@ -97,6 +97,10 @@
       onChange: {
         type: Function,
         default: () => {}
+      },
+      stopAndNotice: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -106,13 +110,17 @@
         currentValue: this.value,
         isHalf: this.starHalf && this.value.toString().split('.').length > 1,
         rateCharSlot: false,
-        customCharSlot: false
+        customCharSlot: false,
+        stopAndNoticeLocal: this.stopAndNotice
       }
     },
 
     watch:{
       value(val){
         this.currentValue = val;
+      },
+      stopAndNotice(val){
+        this.stopAndNoticeLocal = val;
       }
     },
 
@@ -199,6 +207,10 @@
       },
       starClick (i) {
         if (this.disabled) return
+        if (this.stopAndNoticeLocal) {
+          this.$emit('stop-and-notice')
+          return
+        }
         const curValue = this.currentValue
         let value = this.isHalf ? i - 0.5 : i
         this.currentValue = value
