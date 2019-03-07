@@ -114,16 +114,6 @@
         stopAndNoticeLocal: this.stopAndNotice
       }
     },
-
-    watch:{
-      value(val){
-        this.currentValue = val;
-      },
-      stopAndNotice(val){
-        this.stopAndNoticeLocal = val;
-      }
-    },
-
     computed: {
       starDisable () {
         return this.disabled && this.disabledCursor
@@ -131,6 +121,15 @@
           : this.disabled && !this.disabledCursor
             ? 'star-disable-default'
             : 'star-able'
+      }
+    },
+
+    watch:{
+      value(val){
+        this.currentValue = val;
+      },
+      stopAndNotice(val){
+        this.stopAndNoticeLocal = val;
       }
     },
 
@@ -182,6 +181,10 @@
       },
       starMousemove (i) {
         if (this.disabled) return
+        if (this.stopAndNoticeLocal) {
+          this.$emit('on-stop-and-notice')
+          return
+        }
         if (this.starHalf) {
           this.isHalf = false
         }
@@ -190,6 +193,10 @@
       },
       starHalfMousemove (i) {
         if (this.disabled) return
+        if (this.stopAndNoticeLocal) {
+          this.$emit('on-stop-and-notice')
+          return
+        }
         if (this.starHalf) {
           this.isHalf = true
         }
@@ -208,7 +215,7 @@
       starClick (i) {
         if (this.disabled) return
         if (this.stopAndNoticeLocal) {
-          this.$emit('stop-and-notice')
+          this.$emit('on-stop-and-notice')
           return
         }
         const curValue = this.currentValue
@@ -224,6 +231,10 @@
       },
       starMouseleave () {
         if (this.disabled) return
+        if (this.stopAndNoticeLocal) {
+          this.$emit('on-stop-and-notice')
+          return
+        }
         this.hoverIndex = -1
         this.isHalf = this.starHalf && this.currentValue.toString().split('.').length > 1
         if (!this.hoverChange) return
